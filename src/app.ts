@@ -1,11 +1,25 @@
-const express = require("express");
-const app = express();
-const port = 3000;
+import express, { Application, Request, Response } from 'express';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import router from './app/routes';
+import { globalErrorHandler } from './middlewares/globalErrorHandler';
+import { notFound } from './middlewares/notFound';
+const app: Application = express();
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
+//parsers
+app.use(express.json());
+app.use(cors({ origin: ['http://localhost:5173'] }));
+app.use(cookieParser());
+
+//application routes
+app.use(`/api/v1`, router);
+
+app.get('/', (req: Request, res: Response) => {
+  res.send('SteerAway server is running!');
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+// middlewares
+app.use(globalErrorHandler);
+app.use(notFound);
+
+export default app;
