@@ -9,6 +9,6 @@ export const notFound = (
 ) => {
   return res.status(httpStatus.NOT_FOUND).json({
     success: false,
-    message: 'Route not found!',
+    message: 'Not found!',
   });
 };
