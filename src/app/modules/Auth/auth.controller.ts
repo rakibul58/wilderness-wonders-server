@@ -22,7 +22,7 @@ const signInUser = catchAsync(async (req, res) => {
     success: true,
     message: 'User logged in successfully',
     data: result.user,
-    token: result.accessToken
+    token: result.accessToken,
   });
 });
 

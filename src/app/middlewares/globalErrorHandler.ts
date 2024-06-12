@@ -78,6 +78,6 @@ export const globalErrorHandler: ErrorRequestHandler = (
         success: false,
         message,
         errorMessages,
-        stack: config.NODE_ENV === 'development' ? err.stack : null,
+        stack: err.stack
       });
 };

@@ -9,7 +9,7 @@ const userRegisterValidationSchema = z.object({
       .trim()
       .email({ message: 'Please enter a valid email' }),
     role: z.enum(['admin', 'user'], {
-      invalid_type_error: '{VALUE} is not a valid role',
+      invalid_type_error: 'Enter a valid role',
     }),
     password: z
       .string()
