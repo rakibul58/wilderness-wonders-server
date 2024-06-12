@@ -3,8 +3,8 @@ import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
 import config from '../../config';
 import { userTypes } from './user.constant';
-import { TUser, UserModel } from './user.interface';
-const userSchema = new Schema<TUser, UserModel>(
+import { IUser, UserModel } from './user.interface';
+const userSchema = new Schema<IUser, UserModel>(
   {
     name: {
       type: String,
@@ -13,10 +13,10 @@ const userSchema = new Schema<TUser, UserModel>(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     password: {
       type: String,
-      required: true,
       select: 0,
     },
     role: {
@@ -50,14 +50,13 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-
 userSchema.post('save', function (doc, next) {
   doc.password = '';
   next();
 });
 
-userSchema.statics.isUserExists = async function (id: string) {
-  return await User.findById(id).select('+password');
+userSchema.statics.isUserExistsByEmail = async function (email: string) {
+  return await User.findOne({ email }).select('+password');
 };
 
 userSchema.statics.isPasswordMatched = async function (
@@ -67,4 +66,4 @@ userSchema.statics.isPasswordMatched = async function (
   return await bcrypt.compare(plainTextPassword, hashedPassword);
 };
 
-export const User = model<TUser, UserModel>('User', userSchema);
+export const User = model<IUser, UserModel>('User', userSchema);

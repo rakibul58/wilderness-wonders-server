@@ -8,7 +8,8 @@ export const notFound = (
   next: NextFunction,
 ) => {
   return res.status(httpStatus.NOT_FOUND).json({
+    statusCode: httpStatus.NOT_FOUND,
     success: false,
-    message: 'Not found!',
+    message: 'Not Found',
   });
 };

@@ -9,7 +9,8 @@ import handleValidationError from '../errors/handleValidationError';
 import handleCastError from '../errors/handleCastError';
 import handleDuplicateError from '../errors/handleDuplicateError';
 import AppError from '../errors/AppError';
-import { TErrorSources } from '../interfaces/error';
+import { TErrorMessages } from '../interfaces/error';
+import httpStatus from 'http-status';
 
 export const globalErrorHandler: ErrorRequestHandler = (
   err,
@@ -20,7 +21,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
   let statusCode = 500;
   let message = 'Something went wrong!';
 
-  let errorSources: TErrorSources = [
+  let errorMessages: TErrorMessages = [
     {
       path: '',
       message: 'Something went wrong!',
@@ -31,26 +32,26 @@ export const globalErrorHandler: ErrorRequestHandler = (
     const simplifiedError = handleZodError(err);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
-    errorSources = simplifiedError?.errorSources;
+    errorMessages = simplifiedError?.errorMessages;
   } else if (err?.name === 'ValidationError') {
     const simplifiedError = handleValidationError(err);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
-    errorSources = simplifiedError?.errorSources;
+    errorMessages = simplifiedError?.errorMessages;
   } else if (err?.name === 'CastError') {
     const simplifiedError = handleCastError(err);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
-    errorSources = simplifiedError?.errorSources;
+    errorMessages = simplifiedError?.errorMessages;
   } else if (err?.code === 11000) {
     const simplifiedError = handleDuplicateError(err);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
-    errorSources = simplifiedError?.errorSources;
+    errorMessages = simplifiedError?.errorMessages;
   } else if (err instanceof AppError) {
     statusCode = err?.statusCode;
     message = err?.message;
-    errorSources = [
+    errorMessages = [
       {
         path: '',
         message: err.message,
@@ -58,7 +59,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
     ];
   } else if (err instanceof Error) {
     message = err?.message;
-    errorSources = [
+    errorMessages = [
       {
         path: '',
         message: err.message,
@@ -66,10 +67,17 @@ export const globalErrorHandler: ErrorRequestHandler = (
     ];
   }
 
-  return res.status(statusCode).json({
-    success: false,
-    message,
-    errorSources,
-    stack: config.NODE_ENV === 'development' ? err.stack : null,
-  });
+  return message == 'No Data Found' && statusCode == httpStatus.NOT_FOUND
+    ? res.status(statusCode).json({
+        statusCode,
+        success: false,
+        message,
+        data: [],
+      })
+    : res.status(statusCode).json({
+        success: false,
+        message,
+        errorMessages,
+        stack: config.NODE_ENV === 'development' ? err.stack : null,
+      });
 };
