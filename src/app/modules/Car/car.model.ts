@@ -5,7 +5,7 @@ const carSchema = new Schema<ICar, CarModel>(
     name: {
       type: String,
       required: true,
-      unique: true,
+      unique: true
     },
     description: {
       type: String,
