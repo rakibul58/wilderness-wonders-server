@@ -32,7 +32,7 @@ const signInUserFromDB = async (payload: ISignInUser) => {
     throw new AppError(httpStatus.FORBIDDEN, 'Password do not matched');
 
   const jwtPayload = {
-    userId: user.email,
+    email: user.email,
     role: user.role,
   };
 

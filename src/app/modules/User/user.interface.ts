@@ -1,4 +1,5 @@
 import { Model } from 'mongoose';
+import { USER_ROLE } from './user.constant';
 
 /* eslint-disable no-unused-vars */
 export interface IUser {
@@ -22,3 +23,5 @@ export interface ISignInUser {
   email: string;
   password: string;
 }
+
+export type TUserRole = keyof typeof USER_ROLE;
