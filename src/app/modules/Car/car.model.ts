@@ -44,6 +44,16 @@ const carSchema = new Schema<ICar, CarModel>(
   },
 );
 
+carSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+carSchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
 carSchema.statics.isCarExists = async function (id: string) {
   return await Car.findById(id);
 };

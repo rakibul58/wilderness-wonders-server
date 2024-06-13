@@ -1,9 +1,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
-import { ZodError, ZodIssue } from 'zod';
-import config from '../config';
+import { ErrorRequestHandler } from 'express';
+import { ZodError } from 'zod';
 import handleZodError from '../errors/handleZodError';
 import handleValidationError from '../errors/handleValidationError';
 import handleCastError from '../errors/handleCastError';
@@ -78,6 +77,6 @@ export const globalErrorHandler: ErrorRequestHandler = (
         success: false,
         message,
         errorMessages,
-        stack: err.stack
+        stack: err.stack,
       });
 };

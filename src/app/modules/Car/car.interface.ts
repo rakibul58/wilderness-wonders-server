@@ -15,4 +15,3 @@ export interface CarModel extends Model<ICar> {
   // eslint-disable-next-line no-unused-vars
   isCarExists(id: string): Promise<ICar>;
 }
-
