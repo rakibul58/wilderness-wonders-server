@@ -23,6 +23,7 @@ router
     auth(USER_ROLE.admin),
     validateRequest(CarValidations.updateCarValidationSchema),
     CarControllers.updateSingleCar,
-  );
+  )
+  .delete(auth(USER_ROLE.admin), CarControllers.deleteSingleCar);
 
 export const CarRoutes = router;

@@ -37,9 +37,27 @@ const updateACarInDB = async (id: string, payload: Partial<ICar>) => {
   return updatedCar;
 };
 
+const deleteACarFromDB = async (id: string) => {
+  const result = await Car.isCarExists(id);
+  if (!result) {
+    throw new AppError(httpStatus.NOT_FOUND, 'No Data Found');
+  }
+  const deletedCar = await Car.findByIdAndUpdate(
+    id,
+    { isDeleted: true },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+
+  return deletedCar;
+};
+
 export const CarServices = {
   createCarIntoDB,
   getAllCarsFromDB,
   getSingleCarFromDB,
   updateACarInDB,
+  deleteACarFromDB,
 };
