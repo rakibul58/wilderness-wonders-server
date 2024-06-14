@@ -11,6 +11,7 @@
 - [Technologies Used](#technologies-used)
 - [Usage Guide](#usage-guide)
 - [Usage](#usage)
+- [Credentials](#Credentials)
 - [Contact](#contact)
 
 ## Project Overview
@@ -90,6 +91,18 @@ Other commands can be found in package.json scripts
 ## Usage
 
 Once the application is set up and running, you can access it at http://localhost:5000 (or the appropriate port if specified differently). From there, you can create an account, log in, and start booking cars.
+
+## Credentials
+
+### Admin Credentials
+
+- **Email:** admin@test.com
+- **Password:** admin123
+
+### User Credentials
+
+- **Email:** user@test.com
+- **Password:** user123
 
 ## Contact
 
