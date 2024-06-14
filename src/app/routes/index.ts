@@ -5,6 +5,7 @@ import { BookingRoutes } from '../modules/Booking/booking.route';
 
 const router = Router();
 
+// All the routes in the project
 const moduleRoutes = [
   {
     path: '/auth',
@@ -20,6 +21,7 @@ const moduleRoutes = [
   },
 ];
 
+// lopping through the routes
 moduleRoutes.forEach(route => router.use(route.path, route.route));
 
 export default router;

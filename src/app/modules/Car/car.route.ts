@@ -7,14 +7,11 @@ import { USER_ROLE } from '../User/user.constant';
 
 const router = express.Router();
 
-router
-  .route('/')
-  .get(CarControllers.getAllCars)
-  .post(
-    auth(USER_ROLE.admin),
-    validateRequest(CarValidations.createCarValidationSchema),
-    CarControllers.createCar,
-  );
+router.route('/').get(CarControllers.getAllCars).post(
+  auth(USER_ROLE.admin), // checking if the user role is admin
+  validateRequest(CarValidations.createCarValidationSchema), // validating with zod validation
+  CarControllers.createCar,
+);
 
 router
   .route('/return')
@@ -32,6 +29,6 @@ router
     validateRequest(CarValidations.updateCarValidationSchema),
     CarControllers.updateSingleCar,
   )
-  .delete(auth(USER_ROLE.admin), CarControllers.deleteSingleCar);
+  .delete(auth(USER_ROLE.admin), CarControllers.deleteSingleCar); // checking if the user role is user
 
 export const CarRoutes = router;

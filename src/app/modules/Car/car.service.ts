@@ -5,27 +5,33 @@ import { Car } from './car.model';
 import { Booking } from '../Booking/booking.model';
 import mongoose from 'mongoose';
 
+// creating a car in the db
 const createCarIntoDB = async (payload: ICar) => {
   const result = await Car.create(payload);
   return result;
 };
 
+// getting all the cars
 const getAllCarsFromDB = async () => {
   const result = await Car.find();
+  // checking if there is any cars
   if (result.length === 0) {
     throw new AppError(httpStatus.NOT_FOUND, 'No Data Found');
   }
   return result;
 };
 
+// get single car
 const getSingleCarFromDB = async (id: string) => {
   const result = await Car.isCarExists(id);
+  // checking if the car exists
   if (!result) {
     throw new AppError(httpStatus.NOT_FOUND, 'No Data Found');
   }
   return result;
 };
 
+// update a car
 const updateACarInDB = async (id: string, payload: Partial<ICar>) => {
   const result = await Car.isCarExists(id);
   if (!result) {
@@ -39,6 +45,7 @@ const updateACarInDB = async (id: string, payload: Partial<ICar>) => {
   return updatedCar;
 };
 
+// deleting a car
 const deleteACarFromDB = async (id: string) => {
   const result = await Car.isCarExists(id);
   if (!result) {
@@ -56,17 +63,21 @@ const deleteACarFromDB = async (id: string) => {
   return deletedCar;
 };
 
+// return car service
 const returnCarUpdateInDB = async (payload: IReturnCarBooking) => {
   const bookingData = await Booking.findById(payload.bookingId);
+  // checking if booking exists
   if (!bookingData) {
     throw new AppError(httpStatus.NOT_FOUND, 'This booking does not exists');
   }
 
+  // checking if the car exists
   const carData = await Car.findById(bookingData.car);
   if (!carData) {
     throw new AppError(httpStatus.NOT_FOUND, 'This Car does not exists');
   }
 
+  // double checking if the car is available
   if (carData.status == 'available') {
     throw new AppError(
       httpStatus.BAD_REQUEST,
@@ -74,9 +85,13 @@ const returnCarUpdateInDB = async (payload: IReturnCarBooking) => {
     );
   }
 
+  // starting the mongoose session
   const session = await mongoose.startSession();
   try {
+    // starting transaction
     session.startTransaction();
+
+    // updating car status to available as it is returned
     await Car.findByIdAndUpdate(
       carData._id,
       {
@@ -89,6 +104,7 @@ const returnCarUpdateInDB = async (payload: IReturnCarBooking) => {
       },
     );
 
+    // total cost calculations
     const [startTimeInHours, startTimeInMinutes] =
       bookingData.startTime.split(':');
     const [endTimeInHours, endTimeInMinutes] = payload.endTime.split(':');
@@ -100,6 +116,7 @@ const returnCarUpdateInDB = async (payload: IReturnCarBooking) => {
 
     const totalCost = (totalEndTime - totalStartTime) * carData.pricePerHour;
 
+    // updating Booking with totalCost and end time
     const updatedBooking = await Booking.findByIdAndUpdate(
       payload.bookingId,
       {
@@ -115,13 +132,16 @@ const returnCarUpdateInDB = async (payload: IReturnCarBooking) => {
       .populate('user')
       .populate('car');
 
+    // Committing and ending session
     await session.commitTransaction();
     await session.endSession();
 
+    // returning the updated booking
     return updatedBooking;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
+    // handling if there is an error
     await session.abortTransaction();
     await session.endSession();
     throw new Error(err);

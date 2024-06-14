@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+// booking validation schema
 const createBookingValidationSchema = z.object({
   body: z.object({
     carId: z.string({ required_error: 'Card Id is required!' }),

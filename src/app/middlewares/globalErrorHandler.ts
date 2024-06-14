@@ -11,6 +11,7 @@ import AppError from '../errors/AppError';
 import { TErrorMessages } from '../interfaces/error';
 import httpStatus from 'http-status';
 
+// handling all handlers
 export const globalErrorHandler: ErrorRequestHandler = (
   err,
   req,
@@ -18,6 +19,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
   next,
 ) => {
   let statusCode = 500;
+  // dynamic error response object
   const dynamicResponse: {
     statusCode?: number;
     data?: unknown;
@@ -27,6 +29,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
     stack?: unknown;
   } = { message: 'Something went wrong!', success: false };
 
+  // handling response for different types of data
   if (err instanceof ZodError) {
     const simplifiedError = handleZodError(err);
     statusCode = simplifiedError?.statusCode;

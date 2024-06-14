@@ -9,26 +9,33 @@ import { User } from '../User/user.model';
 import { Booking } from './booking.model';
 import mongoose from 'mongoose';
 
+// booking a car
 const bookingACarFromDB = async (
   userData: JwtPayload,
   payload: ICreateBookingData,
 ) => {
+  // checking a car exists
   const carResult = await Car.isCarExists(payload.carId);
   if (!carResult) {
     throw new AppError(httpStatus.NOT_FOUND, 'This car not found');
   }
+  // checking if the car is unavailable
   if (carResult.status === 'unavailable') {
     throw new AppError(httpStatus.BAD_REQUEST, 'This car is unavailable');
   }
+  // checking user exists
   const userResult = await User.findOne({ email: userData.email });
   if (!userResult) {
     throw new AppError(httpStatus.NOT_FOUND, 'This User is not found');
   }
 
+  // starting mongoose session
   const session = await mongoose.startSession();
 
   try {
+    // starting transaction
     session.startTransaction();
+    // updating the car with status unavailable
     const updatedCar = await Car.findByIdAndUpdate(
       payload.carId,
       {
@@ -40,6 +47,7 @@ const bookingACarFromDB = async (
         session,
       },
     );
+    // creating the booking
     const bookedCar = await Booking.create(
       [
         {
@@ -52,14 +60,17 @@ const bookingACarFromDB = async (
       { session },
     );
 
+    // ending and committing session
     await session.commitTransaction();
     await session.endSession();
 
+    // formatting the response data
     const { car, user, ...bookedCarWithoutCarAndUser } =
       bookedCar[0].toObject();
     return { ...bookedCarWithoutCarAndUser, car: updatedCar, user: userResult };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
+    // handling if there is an error
     await session.abortTransaction();
     await session.endSession();
     throw new Error(err);
@@ -68,6 +79,7 @@ const bookingACarFromDB = async (
 
 const getAllBookingFromDB = async (carId: string, date: string) => {
   const query: { car?: string; date?: string } = {};
+  // handling the query
   if (carId?.length) {
     query.car = carId;
   }
@@ -75,6 +87,7 @@ const getAllBookingFromDB = async (carId: string, date: string) => {
     query.date = date;
   }
   const result = await Booking.find(query).populate('car').populate('user');
+  // checking the if there is any data
   if (result.length === 0) {
     throw new AppError(httpStatus.NOT_FOUND, 'No Data Found');
   }
@@ -83,6 +96,7 @@ const getAllBookingFromDB = async (carId: string, date: string) => {
 
 const getIndividualUserBookings = async (userData: JwtPayload) => {
   const userResult = await User.findOne({ email: userData.email });
+  // checking if the user exists
   if (!userResult) {
     throw new AppError(httpStatus.NOT_FOUND, 'This User is not found');
   }

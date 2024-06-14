@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-// Validation for user register
+// Validation for register
 const userRegisterValidationSchema = z.object({
   body: z.object({
     name: z.string({ required_error: 'Name is required!' }).trim(),
@@ -23,6 +23,7 @@ const userRegisterValidationSchema = z.object({
   }),
 });
 
+// Validation for signIn
 const signinValidationSchema = z.object({
   body: z.object({
     email: z
@@ -33,6 +34,7 @@ const signinValidationSchema = z.object({
   }),
 });
 
+// exporting the schema
 export const UserValidations = {
   userRegisterValidationSchema,
   signinValidationSchema,

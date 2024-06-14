@@ -4,6 +4,8 @@ import { Schema, model } from 'mongoose';
 import config from '../../config';
 import { userTypes } from './user.constant';
 import { IUser, UserModel } from './user.interface';
+
+// user schema
 const userSchema = new Schema<IUser, UserModel>(
   {
     name: {
@@ -38,6 +40,7 @@ const userSchema = new Schema<IUser, UserModel>(
   },
 );
 
+// hashing the password before entering into db
 userSchema.pre('save', async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this;
@@ -50,15 +53,18 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+// removing password after response
 userSchema.post('save', function (doc, next) {
   doc.password = '';
   next();
 });
 
+// checking if user exists by email
 userSchema.statics.isUserExistsByEmail = async function (email: string) {
   return await User.findOne({ email }).select('+password');
 };
 
+// comparing passwords
 userSchema.statics.isPasswordMatched = async function (
   plainTextPassword,
   hashedPassword,

@@ -3,6 +3,8 @@ import catchAsync from '../../utils/catchAsync';
 import { BookingServices } from './booking.service';
 import sendResponse from '../../utils/sendResponse';
 
+// booking controllers
+
 const createABooking = catchAsync(async (req, res) => {
   const result = await BookingServices.bookingACarFromDB(req.user, req.body);
 

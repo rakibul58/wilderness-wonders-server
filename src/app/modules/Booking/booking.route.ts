@@ -9,10 +9,10 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(auth(USER_ROLE.admin), BookingControllers.getAllBooking)
+  .get(auth(USER_ROLE.admin), BookingControllers.getAllBooking) // checking if the user role is admin
   .post(
-    validateRequest(BookingValidations.createBookingValidationSchema),
-    auth(USER_ROLE.user),
+    validateRequest(BookingValidations.createBookingValidationSchema), // validating the schema
+    auth(USER_ROLE.user), // checking if the user role is user
     BookingControllers.createABooking,
   );
 

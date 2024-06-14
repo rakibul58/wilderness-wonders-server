@@ -2,6 +2,8 @@ import { Model } from 'mongoose';
 import { USER_ROLE } from './user.constant';
 
 /* eslint-disable no-unused-vars */
+
+// User Interface
 export interface IUser {
   name: string;
   email: string;
@@ -11,6 +13,7 @@ export interface IUser {
   address: string;
 }
 
+// User Static Model
 export interface UserModel extends Model<IUser> {
   isUserExistsByEmail(email: string): Promise<IUser>;
   isPasswordMatched(
@@ -19,9 +22,12 @@ export interface UserModel extends Model<IUser> {
   ): Promise<boolean>;
 }
 
+// SignIn User interface
 export interface ISignInUser {
   email: string;
   password: string;
 }
+
+// Type of user role
 
 export type TUserRole = keyof typeof USER_ROLE;

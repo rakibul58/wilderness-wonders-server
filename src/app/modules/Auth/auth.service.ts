@@ -7,6 +7,7 @@ import { createToken } from './auth.utils';
 
 const registerUserIntoDB = async (payload: IUser) => {
   const user = await User.isUserExistsByEmail(payload.email);
+  // if there is no password field then adding a default password
   payload.password = payload.password || config.default_password;
   if (user) {
     throw new AppError(
@@ -36,12 +37,14 @@ const signInUserFromDB = async (payload: ISignInUser) => {
     role: user.role,
   };
 
+  // creating token
   const accessToken = createToken(
     jwtPayload,
     config.jwt_access_secret as string,
     config.jwt_access_expires_in as string,
   );
 
+  // removing password
   user.password = '';
 
   return {

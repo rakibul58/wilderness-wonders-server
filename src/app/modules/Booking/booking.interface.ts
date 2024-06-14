@@ -1,4 +1,4 @@
-import { Model, Types } from 'mongoose';
+import { Types } from 'mongoose';
 
 export interface IBooking {
   date: string;
@@ -13,9 +13,4 @@ export interface ICreateBookingData {
   carId: string;
   date: string;
   startTime: string;
-}
-
-export interface BookingModel extends Model<IBooking> {
-  // eslint-disable-next-line no-unused-vars
-  isBookingExists(carId: string, date: string): Promise<IBooking>;
 }

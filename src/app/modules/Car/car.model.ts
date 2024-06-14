@@ -1,11 +1,13 @@
 import { Schema, model } from 'mongoose';
 import { CarModel, ICar } from './car.interface';
+
+// car schema
 const carSchema = new Schema<ICar, CarModel>(
   {
     name: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
     },
     description: {
       type: String,
@@ -44,6 +46,7 @@ const carSchema = new Schema<ICar, CarModel>(
   },
 );
 
+// removing the car or cars that are deleted
 carSchema.pre('find', function (next) {
   this.find({ isDeleted: { $ne: true } });
   next();
@@ -54,6 +57,7 @@ carSchema.pre('findOne', function (next) {
   next();
 });
 
+// checking if the car is exists
 carSchema.statics.isCarExists = async function (id: string) {
   return await Car.findById(id);
 };

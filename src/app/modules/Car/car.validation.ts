@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+// create car validation schema
 const createCarValidationSchema = z.object({
   body: z.object({
     name: z.string({ required_error: 'Name is required!' }).trim(),
@@ -20,6 +21,7 @@ const createCarValidationSchema = z.object({
   }),
 });
 
+// update car validation schema
 const updateCarValidationSchema = z.object({
   body: z.object({
     name: z.string({ required_error: 'Name is required!' }).trim().optional(),
@@ -46,6 +48,7 @@ const updateCarValidationSchema = z.object({
   }),
 });
 
+// return car validation schema
 const returnCarBookingValidationSchema = z.object({
   body: z.object({
     bookingId: z.string({ required_error: 'Booking Id is required!' }),

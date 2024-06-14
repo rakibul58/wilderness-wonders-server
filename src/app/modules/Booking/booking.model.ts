@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
-import { BookingModel, IBooking } from './booking.interface';
-const bookingSchema = new Schema<IBooking, BookingModel>(
+import { IBooking } from './booking.interface';
+// booking schema
+const bookingSchema = new Schema<IBooking>(
   {
     date: {
       type: String,
@@ -34,11 +35,4 @@ const bookingSchema = new Schema<IBooking, BookingModel>(
   },
 );
 
-bookingSchema.statics.isBookingExists = async function (
-  carId: string,
-  date: string,
-) {
-  return await Booking.findOne({ car: carId, date });
-};
-
-export const Booking = model<IBooking, BookingModel>('Booking', bookingSchema);
+export const Booking = model<IBooking>('Booking', bookingSchema);

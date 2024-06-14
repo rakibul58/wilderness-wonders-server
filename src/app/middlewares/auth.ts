@@ -13,7 +13,10 @@ const auth = (...requiredRoles: TUserRole[]) => {
 
     // checking if the token is missing
     if (!token) {
-      throw new AppError(httpStatus.UNAUTHORIZED, 'You have no access to this route');
+      throw new AppError(
+        httpStatus.UNAUTHORIZED,
+        'You have no access to this route',
+      );
     }
 
     // checking if the token is sent invalid way
@@ -34,7 +37,10 @@ const auth = (...requiredRoles: TUserRole[]) => {
     ) as JwtPayload;
 
     if (!decoded) {
-      throw new AppError(httpStatus.UNAUTHORIZED, 'You have no access to this route');
+      throw new AppError(
+        httpStatus.UNAUTHORIZED,
+        'You have no access to this route',
+      );
     }
 
     const { role, email } = decoded;
@@ -46,8 +52,12 @@ const auth = (...requiredRoles: TUserRole[]) => {
       throw new AppError(httpStatus.NOT_FOUND, 'This user is not found!');
     }
 
+    // checking the role is correct
     if (requiredRoles && !requiredRoles.includes(role)) {
-      throw new AppError(httpStatus.UNAUTHORIZED, 'You have no access to this route');
+      throw new AppError(
+        httpStatus.UNAUTHORIZED,
+        'You have no access to this route',
+      );
     }
 
     req.user = decoded as JwtPayload;
