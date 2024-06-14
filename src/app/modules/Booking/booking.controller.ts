@@ -14,6 +14,22 @@ const createABooking = catchAsync(async (req, res) => {
   });
 });
 
+const getAllBooking = catchAsync(async (req, res) => {
+  const { carId, date } = req.query;
+  const result = await BookingServices.getAllBookingFromDB(
+    carId as string,
+    date as string,
+  );
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Bookings retrieved successfully',
+    data: result,
+  });
+});
+
 export const BookingControllers = {
   createABooking,
+  getAllBooking,
 };

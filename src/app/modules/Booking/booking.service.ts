@@ -66,6 +66,22 @@ const bookingACarFromDB = async (
   }
 };
 
+const getAllBookingFromDB = async (carId: string, date: string) => {
+  const query: { car?: string; date?: string } = {};
+  if (carId?.length) {
+    query.car = carId;
+  }
+  if (date?.length) {
+    query.date = date;
+  }
+  const result = await Booking.find(query).populate('car').populate('user');
+  if (result.length === 0) {
+    throw new AppError(httpStatus.NOT_FOUND, 'No Data Found');
+  }
+  return result;
+};
+
 export const BookingServices = {
   bookingACarFromDB,
+  getAllBookingFromDB,
 };
