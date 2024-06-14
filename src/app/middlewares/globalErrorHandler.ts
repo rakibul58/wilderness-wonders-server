@@ -18,65 +18,80 @@ export const globalErrorHandler: ErrorRequestHandler = (
   next,
 ) => {
   let statusCode = 500;
-  let message = 'Something went wrong!';
-
-  let errorMessages: TErrorMessages = [
-    {
-      path: '',
-      message: 'Something went wrong!',
-    },
-  ];
+  const dynamicResponse: {
+    statusCode?: number;
+    data?: unknown;
+    message: string;
+    errorMessages?: TErrorMessages;
+    success: boolean;
+    stack?: unknown;
+  } = { message: 'Something went wrong!', success: false };
 
   if (err instanceof ZodError) {
     const simplifiedError = handleZodError(err);
     statusCode = simplifiedError?.statusCode;
-    message = simplifiedError?.message;
-    errorMessages = simplifiedError?.errorMessages;
+    dynamicResponse.message = simplifiedError?.message;
+    dynamicResponse.errorMessages = simplifiedError?.errorMessages;
+    dynamicResponse.stack = err.stack;
   } else if (err?.name === 'ValidationError') {
     const simplifiedError = handleValidationError(err);
     statusCode = simplifiedError?.statusCode;
-    message = simplifiedError?.message;
-    errorMessages = simplifiedError?.errorMessages;
+    dynamicResponse.message = simplifiedError?.message;
+    dynamicResponse.errorMessages = simplifiedError?.errorMessages;
+    dynamicResponse.stack = err.stack;
   } else if (err?.name === 'CastError') {
     const simplifiedError = handleCastError(err);
     statusCode = simplifiedError?.statusCode;
-    message = simplifiedError?.message;
-    errorMessages = simplifiedError?.errorMessages;
+    dynamicResponse.message = simplifiedError?.message;
+    dynamicResponse.errorMessages = simplifiedError?.errorMessages;
+    dynamicResponse.stack = err.stack;
   } else if (err?.code === 11000) {
     const simplifiedError = handleDuplicateError(err);
     statusCode = simplifiedError?.statusCode;
-    message = simplifiedError?.message;
-    errorMessages = simplifiedError?.errorMessages;
+    dynamicResponse.message = simplifiedError?.message;
+    dynamicResponse.errorMessages = simplifiedError?.errorMessages;
+    dynamicResponse.stack = err.stack;
+  } else if (
+    err instanceof AppError &&
+    err?.statusCode === httpStatus.NOT_FOUND &&
+    err?.message === 'No Data Found'
+  ) {
+    statusCode = err?.statusCode;
+    dynamicResponse.statusCode = err?.statusCode;
+    dynamicResponse.message = err?.message;
+    dynamicResponse.data = [];
+    dynamicResponse.success = false;
+  } else if (
+    err instanceof AppError &&
+    err?.statusCode === httpStatus.UNAUTHORIZED &&
+    err?.message === 'You have no access to this route'
+  ) {
+    statusCode = err?.statusCode;
+    dynamicResponse.statusCode = err?.statusCode;
+    dynamicResponse.message = err?.message;
+    dynamicResponse.success = false;
   } else if (err instanceof AppError) {
     statusCode = err?.statusCode;
-    message = err?.message;
-    errorMessages = [
+    dynamicResponse.message = err?.message;
+    dynamicResponse.errorMessages = [
       {
         path: '',
         message: err.message,
       },
     ];
+    dynamicResponse.stack = err.stack;
   } else if (err instanceof Error) {
-    message = err?.message;
-    errorMessages = [
+    dynamicResponse.message = err?.message;
+    dynamicResponse.errorMessages = [
       {
         path: '',
         message: err.message,
       },
     ];
+    dynamicResponse.stack = err.stack;
   }
 
-  return message == 'No Data Found' && statusCode == httpStatus.NOT_FOUND
-    ? res.status(statusCode).json({
-        statusCode,
-        success: false,
-        message,
-        data: [],
-      })
-    : res.status(statusCode).json({
-        success: false,
-        message,
-        errorMessages,
-        stack: err.stack,
-      });
+  return res
+    .status(dynamicResponse.statusCode || statusCode)
+    .json(dynamicResponse);
 };

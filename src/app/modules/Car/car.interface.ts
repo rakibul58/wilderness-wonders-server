@@ -11,6 +11,11 @@ export interface ICar {
   isDeleted?: boolean;
 }
 
+export interface IReturnCarBooking {
+  bookingId: string;
+  endTime: string;
+}
+
 export interface CarModel extends Model<ICar> {
   // eslint-disable-next-line no-unused-vars
   isCarExists(id: string): Promise<ICar>;

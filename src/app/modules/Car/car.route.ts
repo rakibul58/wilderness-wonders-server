@@ -17,6 +17,14 @@ router
   );
 
 router
+  .route('/return')
+  .put(
+    auth(USER_ROLE.admin),
+    validateRequest(CarValidations.returnCarBookingValidationSchema),
+    CarControllers.returnCarUpdate,
+  );
+
+router
   .route('/:id')
   .get(CarControllers.getSingleCar)
   .put(

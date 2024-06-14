@@ -46,7 +46,15 @@ const updateCarValidationSchema = z.object({
   }),
 });
 
+const returnCarBookingValidationSchema = z.object({
+  body: z.object({
+    bookingId: z.string({ required_error: 'Booking Id is required!' }),
+    endTime: z.string({ required_error: 'End time is required!' }),
+  }),
+});
+
 export const CarValidations = {
   createCarValidationSchema,
   updateCarValidationSchema,
+  returnCarBookingValidationSchema,
 };
