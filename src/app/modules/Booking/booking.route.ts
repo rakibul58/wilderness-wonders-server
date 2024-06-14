@@ -16,4 +16,8 @@ router
     BookingControllers.createABooking,
   );
 
+router
+  .route('/my-bookings')
+  .get(auth(USER_ROLE.user), BookingControllers.getIndividualBookings);
+
 export const BookingRoutes = router;

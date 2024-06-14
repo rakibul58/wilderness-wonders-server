@@ -81,7 +81,23 @@ const getAllBookingFromDB = async (carId: string, date: string) => {
   return result;
 };
 
+const getIndividualUserBookings = async (userData: JwtPayload) => {
+  const userResult = await User.findOne({ email: userData.email });
+  if (!userResult) {
+    throw new AppError(httpStatus.NOT_FOUND, 'This User is not found');
+  }
+
+  const result = await Booking.find({ user: userResult._id })
+    .populate('car')
+    .populate('user');
+  if (result.length === 0) {
+    throw new AppError(httpStatus.NOT_FOUND, 'No Data Found');
+  }
+  return result;
+};
+
 export const BookingServices = {
   bookingACarFromDB,
   getAllBookingFromDB,
+  getIndividualUserBookings,
 };
