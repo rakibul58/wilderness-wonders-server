@@ -35,24 +35,28 @@ export const globalErrorHandler: ErrorRequestHandler = (
     statusCode = simplifiedError?.statusCode;
     dynamicResponse.message = simplifiedError?.message;
     dynamicResponse.errorMessages = simplifiedError?.errorMessages;
+    dynamicResponse.statusCode = simplifiedError.statusCode;
     dynamicResponse.stack = err.stack;
   } else if (err?.name === 'ValidationError') {
     const simplifiedError = handleValidationError(err);
     statusCode = simplifiedError?.statusCode;
     dynamicResponse.message = simplifiedError?.message;
     dynamicResponse.errorMessages = simplifiedError?.errorMessages;
+    dynamicResponse.statusCode = simplifiedError.statusCode;
     dynamicResponse.stack = err.stack;
   } else if (err?.name === 'CastError') {
     const simplifiedError = handleCastError(err);
     statusCode = simplifiedError?.statusCode;
     dynamicResponse.message = simplifiedError?.message;
     dynamicResponse.errorMessages = simplifiedError?.errorMessages;
+    dynamicResponse.statusCode = simplifiedError.statusCode;
     dynamicResponse.stack = err.stack;
   } else if (err?.code === 11000) {
     const simplifiedError = handleDuplicateError(err);
     statusCode = simplifiedError?.statusCode;
     dynamicResponse.message = simplifiedError?.message;
     dynamicResponse.errorMessages = simplifiedError?.errorMessages;
+    dynamicResponse.statusCode = simplifiedError.statusCode;
     dynamicResponse.stack = err.stack;
   } else if (
     err instanceof AppError &&
