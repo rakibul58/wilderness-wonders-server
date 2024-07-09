@@ -1,5 +1,5 @@
 {
-  "name": "steer-away",
+  "name": "wilderness-wonders",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -14,7 +14,7 @@
     "format:fix": "npx prettier --write src"
   },
   "keywords": [],
-  "author": "",
+  "author": "Rakibul Hasan",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",

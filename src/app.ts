@@ -15,7 +15,7 @@ app.use(cookieParser());
 app.use(`/api`, router);
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('SteerAway server is running!');
+  res.send('Wilderness Wonders server is running!');
 });
 
 // middlewares
