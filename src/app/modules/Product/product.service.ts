@@ -1,8 +1,17 @@
+import { IProduct } from './product.interface';
+import { Product } from './product.model';
+
 // creating a Product in the db
-const createProductIntoDB = async () => {};
+const createProductIntoDB = async (payload: IProduct) => {
+  const result = await Product.create(payload);
+  return result;
+};
 
 // getting all the Products
-const getAllProductsFromDB = async () => {};
+const getAllProductsFromDB = async () => {
+  const result = await Product.find();
+  return result;
+};
 
 // get single Product
 const getSingleProductFromDB = async () => {};

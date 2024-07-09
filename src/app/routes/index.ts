@@ -1,14 +1,14 @@
 import { Router } from 'express';
-import { CarRoutes } from '../modules/Product/product.route';
+import { ProductRoutes } from '../modules/Product/product.route';
 
 const router = Router();
 
 // All the routes in the project
 const moduleRoutes = [
   {
-    path: '/cars',
-    route: CarRoutes,
-  }
+    path: '/products',
+    route: ProductRoutes,
+  },
 ];
 
 // lopping through the routes
