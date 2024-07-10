@@ -27,6 +27,7 @@ const createProductValidationSchema = z.object({
       .min(0, 'Rating cannot be less than 0!')
       .max(5, 'Rating cannot be more than 5!')
       .optional(),
+    imageGallery: z.array(z.string()).optional(),
     thumbnail: z
       .string({ required_error: 'Thumbnail URL is required!' })
       .url('Thumbnail must be a valid URL!'),
@@ -34,33 +35,28 @@ const createProductValidationSchema = z.object({
 });
 
 const updateProductValidationSchema = z.object({
-  body: z
-    .object({
-      name: z.string().trim().min(1, 'Name cannot be empty!').optional(),
-      description: z
-        .string()
-        .trim()
-        .min(1, 'Description cannot be empty!')
-        .optional(),
-      price: z.number().nonnegative('Price cannot be negative!').optional(),
-      stock: z
-        .number()
-        .int('Stock must be an integer!')
-        .nonnegative('Stock cannot be negative!')
-        .optional(),
-      category: z
-        .string()
-        .trim()
-        .min(1, 'Category cannot be empty!')
-        .optional(),
-      rating: z
-        .number()
-        .min(0, 'Rating cannot be less than 0!')
-        .max(5, 'Rating cannot be more than 5!')
-        .optional(),
-      thumbnail: z.string().url('Thumbnail must be a valid URL!').optional(),
-    })
-    .partial(),
+  body: z.object({
+    name: z.string().trim().min(1, 'Name cannot be empty!').optional(),
+    description: z
+      .string()
+      .trim()
+      .min(1, 'Description cannot be empty!')
+      .optional(),
+    price: z.number().nonnegative('Price cannot be negative!').optional(),
+    stock: z
+      .number()
+      .int('Stock must be an integer!')
+      .nonnegative('Stock cannot be negative!')
+      .optional(),
+    category: z.string().trim().min(1, 'Category cannot be empty!').optional(),
+    rating: z
+      .number()
+      .min(0, 'Rating cannot be less than 0!')
+      .max(5, 'Rating cannot be more than 5!')
+      .optional(),
+    thumbnail: z.string().url('Thumbnail must be a valid URL!').optional(),
+    imageGallery: z.array(z.string()).optional(),
+  }),
 });
 
 export const ProductValidations = {

@@ -32,6 +32,10 @@ const productSchema = new Schema<IProduct>(
       type: String,
       required: true,
     },
+    imageGallery: {
+      type: [String],
+      default: [],
+    },
     isDeleted: {
       type: Boolean,
       default: false,

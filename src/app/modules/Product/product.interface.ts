@@ -6,5 +6,6 @@ export interface IProduct {
   category: string;
   rating?: number;
   thumbnail: string;
-  isDeleted: boolean
+  imageGallery?: string[];
+  isDeleted: boolean;
 }
