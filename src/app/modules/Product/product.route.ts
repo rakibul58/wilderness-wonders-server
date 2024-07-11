@@ -13,4 +13,13 @@ router
     ProductControllers.createProduct,
   );
 
+router
+  .route('/:id')
+  .get(ProductControllers.getSingleProduct)
+  .put(
+    validateRequest(ProductValidations.updateProductValidationSchema),
+    ProductControllers.updateSingleProduct,
+  )
+  .delete(ProductControllers.deleteSingleProduct);
+
 export const ProductRoutes = router;

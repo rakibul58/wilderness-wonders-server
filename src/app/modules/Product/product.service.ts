@@ -15,6 +15,7 @@ const getAllProductsFromDB = async (query: Record<string, unknown>) => {
     .search(ProductSearchableFields)
     .filter()
     .sort()
+    .priceRange()
     .paginate()
     .fields();
 
@@ -28,13 +29,27 @@ const getAllProductsFromDB = async (query: Record<string, unknown>) => {
 };
 
 // get single Product
-const getSingleProductFromDB = async () => {};
+const getSingleProductFromDB = async (id: string) => {
+  const result = await Product.findById(id);
+  return result;
+};
 
 // update a Product
-const updateAProductInDB = async () => {};
+const updateAProductInDB = async (id: string, payload: Partial<IProduct>) => {
+  const result = await Product.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return result;
+};
 
 // deleting a Product
-const deleteAProductFromDB = async () => {};
+const deleteAProductFromDB = async (id: string) => {
+  const result = await Product.findByIdAndUpdate(id, { isDeleted: true });
+
+  return result;
+};
 
 export const ProductServices = {
   createProductIntoDB,

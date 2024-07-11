@@ -29,7 +29,15 @@ class QueryBuilder<T> {
     const queryObj = { ...this.query }; // copy
 
     // Filtering
-    const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
+    const excludeFields = [
+      'searchTerm',
+      'sort',
+      'limit',
+      'page',
+      'fields',
+      'minPrice',
+      'maxPrice',
+    ];
 
     excludeFields.forEach(el => delete queryObj[el]);
 
@@ -63,6 +71,29 @@ class QueryBuilder<T> {
     this.modelQuery = this.modelQuery.select(fields);
     return this;
   }
+
+  priceRange() {
+    const minPrice = this?.query?.minPrice;
+    const maxPrice = this?.query?.maxPrice;
+    const priceFilter: Record<string, unknown> = {};
+
+    if (minPrice !== undefined) {
+      priceFilter.$gte = minPrice;
+    }
+
+    if (maxPrice !== undefined) {
+      priceFilter.$lte = maxPrice;
+    }
+
+    if (minPrice !== undefined || maxPrice !== undefined) {
+      this.modelQuery = this.modelQuery.find({
+        price: priceFilter,
+      } as FilterQuery<T>);
+    }
+
+    return this;
+  }
+
   async countTotal() {
     const totalQueries = this.modelQuery.getFilter();
     const total = await this.modelQuery.model.countDocuments(totalQueries);

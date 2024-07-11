@@ -26,29 +26,35 @@ const getAllProducts = catchAsync(async (req, res) => {
 });
 
 const getSingleProduct = catchAsync(async (req, res) => {
+  const result = await ProductServices.getSingleProductFromDB(req.params.id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'A Product retrieved successfully',
-    data: '',
+    data: result,
   });
 });
 
 const updateSingleProduct = catchAsync(async (req, res) => {
+  const result = await ProductServices.updateAProductInDB(
+    req.params.id,
+    req.body,
+  );
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Product updated successfully',
-    data: '',
+    data: result,
   });
 });
 
 const deleteSingleProduct = catchAsync(async (req, res) => {
+  const result = await ProductServices.deleteAProductFromDB(req.params.id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Product Deleted successfully',
-    data: '',
+    data: result,
   });
 });
 
