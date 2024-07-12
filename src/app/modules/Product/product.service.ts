@@ -51,10 +51,26 @@ const deleteAProductFromDB = async (id: string) => {
   return result;
 };
 
+//product checkout
+const checkoutFromDB = async (
+  payload: (IProduct & { quantity: number; _id: string })[],
+) => {
+  const result = await Promise.all(
+    payload.map(item => {
+      return Product.updateOne(
+        { _id: item._id },
+        { $inc: { stock: -item.quantity } },
+      );
+    }),
+  );
+  return result;
+};
+
 export const ProductServices = {
   createProductIntoDB,
   getAllProductsFromDB,
   getSingleProductFromDB,
   updateAProductInDB,
   deleteAProductFromDB,
+  checkoutFromDB,
 };

@@ -14,6 +14,13 @@ router
   );
 
 router
+  .route('/checkout')
+  .post(
+    validateRequest(ProductValidations.productCheckoutValidations),
+    ProductControllers.checkoutProduct,
+  );
+
+router
   .route('/:id')
   .get(ProductControllers.getSingleProduct)
   .put(

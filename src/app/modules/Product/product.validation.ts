@@ -59,7 +59,41 @@ const updateProductValidationSchema = z.object({
   }),
 });
 
+const productCheckoutValidations = z.object({
+  body: z.array(
+    z.object({
+      _id: z.string(),
+      name: z.string().trim().min(1, 'Name cannot be empty!').optional(),
+      description: z
+        .string()
+        .trim()
+        .min(1, 'Description cannot be empty!')
+        .optional(),
+      price: z.number().nonnegative('Price cannot be negative!').optional(),
+      stock: z
+        .number()
+        .int('Stock must be an integer!')
+        .nonnegative('Stock cannot be negative!')
+        .optional(),
+      category: z
+        .string()
+        .trim()
+        .min(1, 'Category cannot be empty!')
+        .optional(),
+      rating: z
+        .number()
+        .min(0, 'Rating cannot be less than 0!')
+        .max(5, 'Rating cannot be more than 5!')
+        .optional(),
+      thumbnail: z.string().optional(),
+      imageGallery: z.array(z.string()).optional(),
+      quantity: z.number().nonnegative(),
+    }),
+  ),
+});
+
 export const ProductValidations = {
   createProductValidationSchema,
   updateProductValidationSchema,
+  productCheckoutValidations,
 };

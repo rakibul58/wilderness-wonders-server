@@ -58,10 +58,21 @@ const deleteSingleProduct = catchAsync(async (req, res) => {
   });
 });
 
+const checkoutProduct = catchAsync(async (req, res) => {
+  const result = await ProductServices.checkoutFromDB(req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Product Ordered successfully',
+    data: result,
+  });
+});
+
 export const ProductControllers = {
   createProduct,
   getAllProducts,
   getSingleProduct,
   updateSingleProduct,
   deleteSingleProduct,
+  checkoutProduct,
 };
