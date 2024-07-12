@@ -1,6 +1,6 @@
 # Wilderness Wonders
 
-[Live URL](https://steer-away.vercel.app/)
+[Live URL](https://wilderness-wonders-server.vercel.app/)
 
 ## Introduction
 
