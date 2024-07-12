@@ -61,9 +61,36 @@ Instructions on how to install, configure, and get the project running locally.
    PORT=5000
    DATABASE_URL=
    ```
-3. Run the project.
-   ```
+
+### Usage
+1. Start the Server.
+
+   ```bash
    npm start
+   ```
+
+2. API Endpoints:
+
+- Product Endpoints:
+  - GET /products: Retrieve all products.
+  - POST /products: Add a new product.
+  - GET /products/:id: Retrieve a specific product.
+  - PUT /products/:id: Update a product.
+  - DELETE /products/:id: Delete a product.
+  - POST /products/checkout: Checkout a from cart.
+
+3. Example Request:
+
+   To add a new product, send a POST request to /products with the following JSON body:
+   ```
+   {
+    "name": "Osprey Atmos AG 65",
+    "description": "Anti-Gravity suspension system, adjustable harness and hipbelt, multiple pockets and compartments, hydration reservoir sleeve, removable top lid.",
+    "price": 14.99,
+    "stock": 180,
+    "category": "Backpack",
+    "thumbnail": ""
+   }
    ```
 
 ## Author
