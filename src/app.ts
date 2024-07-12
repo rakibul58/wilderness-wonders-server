@@ -8,7 +8,7 @@ const app: Application = express();
 
 //parsers
 app.use(express.json());
-app.use(cors({ origin: ['http://localhost:5173'] }));
+app.use(cors({ origin: ['http://localhost:5173', 'https://wilderness-wonders.vercel.app'] }));
 app.use(cookieParser());
 
 //application routes
