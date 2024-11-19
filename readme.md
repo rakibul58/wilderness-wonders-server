@@ -40,7 +40,7 @@ Instructions on how to install, configure, and get the project running locally.
 1. Clone the repo.
 
    ```bash
-   https://github.com/rakibul58/wilderness-wonders-server-batch-3-assignment-04.git
+   https://github.com/rakibul58/wilderness-wonders-server.git
    ```
 
 2. Install node_module.
